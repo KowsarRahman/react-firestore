@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import './App.css';
 import { app , database} from './firebaseConfig';
-import { collection, addDoc } from "firebase/firestore";
+import { collection, 
+  addDoc, 
+  getDocs,
+  doc,
+  updateDoc 
+} from "firebase/firestore";
 
 function App() {
 
@@ -30,6 +35,29 @@ function App() {
     });
   };
 
+  const getData = () => {
+    getDocs(collectionRef)
+    .then((response) => {
+      console.log(response.docs.map((item) => {
+        return {...item.data(), id: item.id};
+      }));
+    })
+  };
+
+  const updateData = () => {
+    const docToUpdate = doc(database, "users", "BHMCAjqB23U22VzlIlgO");
+    updateDoc(docToUpdate, {
+      email: "kaifrahman@gmail.com",
+      password: 123
+    })
+    .then(()=> {
+      alert("Data updated");
+    })
+    .catch((error)=> {
+      alert(error.message);
+    })
+  };
+
 
   return (
     <div className="App">
@@ -44,6 +72,8 @@ function App() {
      onChange={(event) => handleInput(event)}
      />
       <button onClick={handleSubmit}>Log In</button>
+      <button onClick={getData}>Get Data</button>
+      <button onClick={updateData}>Update Data of ID 1</button>
     </div>
   );
 }
