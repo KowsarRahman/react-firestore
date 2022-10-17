@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import './App.css';
 import { app , database} from './firebaseConfig';
-import { getAuth, createUserWithEmailAndPassword , signInWithEmailAndPassword} from "firebase/auth";
+import { collection, addDoc } from "firebase/firestore";
 
 function App() {
 
-  let auth = getAuth();
 
   const [data, setData] = useState({});
+  const collectionRef = collection(database, "users");
+
 
   const handleInput = (event) => {
     let newInput = { [event.target.name]: event.target.value };
@@ -17,12 +18,15 @@ function App() {
   };
 
   const handleSubmit = () => {
-    signInWithEmailAndPassword(auth, data.email, data.password)
-    .then((response) => {
-      console.log(response.user);
+    addDoc(collectionRef, {
+      email: data.email,
+      password: data.password,
     })
-    .catch((error) => {
-      console.log(alert(error.message));
+    .then(() => {
+      alert("Data added");
+    })
+    .catch((error)=> {
+      alert(error.message);
     });
   };
 
