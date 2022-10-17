@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import './App.css';
 import { app , database} from './firebaseConfig';
 import { collection, 
@@ -6,7 +6,8 @@ import { collection,
   getDocs,
   doc,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  onSnapshot
 } from "firebase/firestore";
 
 function App() {
@@ -37,9 +38,9 @@ function App() {
   };
 
   const getData = () => {
-    getDocs(collectionRef)
-    .then((response) => {
-      console.log(response.docs.map((item) => {
+    
+    onSnapshot(collectionRef, (data) => {
+      console.log(data.docs.map((item) => {
         return {...item.data(), id: item.id};
       }));
     })
@@ -71,6 +72,9 @@ function App() {
     })
   };
 
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <div className="App">
