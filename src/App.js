@@ -7,7 +7,9 @@ import { collection,
   doc,
   updateDoc,
   deleteDoc,
-  onSnapshot
+  onSnapshot,
+  query,
+  where
 } from "firebase/firestore";
 
 function App() {
@@ -15,6 +17,7 @@ function App() {
 
   const [data, setData] = useState({});
   const collectionRef = collection(database, "users");
+  const ageQuery = query(collectionRef, where("email", "==", "saditsnigdho@gmail.com"));
 
 
   const handleInput = (event) => {
@@ -38,8 +41,8 @@ function App() {
   };
 
   const getData = () => {
-    
-    onSnapshot(collectionRef, (data) => {
+    //Just replace the collectionRef with ageQuery
+    onSnapshot(ageQuery, (data) => {
       console.log(data.docs.map((item) => {
         return {...item.data(), id: item.id};
       }));
