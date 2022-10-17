@@ -5,7 +5,8 @@ import { collection,
   addDoc, 
   getDocs,
   doc,
-  updateDoc 
+  updateDoc,
+  deleteDoc
 } from "firebase/firestore";
 
 function App() {
@@ -57,6 +58,18 @@ function App() {
       alert(error.message);
     })
   };
+  
+  const deleteData = () => {
+    const docToUpdate = doc(database, "users", "BHMCAjqB23U22VzlIlgO");
+    deleteDoc(docToUpdate, {
+    })
+    .then(()=> {
+      alert("Data deleted");
+    })
+    .catch((error)=> {
+      alert(error.message);
+    })
+  };
 
 
   return (
@@ -74,6 +87,7 @@ function App() {
       <button onClick={handleSubmit}>Log In</button>
       <button onClick={getData}>Get Data</button>
       <button onClick={updateData}>Update Data of ID 1</button>
+      <button onClick={deleteData}>Delete Data of ID 1</button>
     </div>
   );
 }
